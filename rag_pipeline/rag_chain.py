@@ -4,7 +4,7 @@ from langchain_classic.chains.combine_documents import create_stuff_documents_ch
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_community.chat_message_histories import ChatMessageHistory
-from langchain_core.history import BaseChatMessageHistory
+from langchain_core.chat_history import BaseChatMessageHistory
 from rag_pipeline.config import Config
 
 class RAGChainBuilder:
@@ -30,7 +30,7 @@ class RAGChainBuilder:
 
         qa_prompt = ChatPromptTemplate.from_messages([
             ("system", """You're an e-commerce assistant answering product-related queries.
-                          Stick to context. Keep it concise and helpful.\n\nCONTEXT:\n{context}\n\nQUESTION: {input}"""),
+                          Stick to context. Keep it concise. Generate bulleted list items wherever possible\n\nCONTEXT:\n{context}\n\nQUESTION: {input}"""),
                           MessagesPlaceholder(variable_name="chat_history"),
             ("human", "{input}"),
         ])
@@ -53,5 +53,5 @@ class RAGChainBuilder:
             self.get_history,
             input_messages_key="input",
             history_messages_key="chat_history",
-            output_message_key="answer",
+            output_message_key="output",
         )
